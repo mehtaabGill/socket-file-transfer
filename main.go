@@ -19,7 +19,7 @@ func main() {
 
 	//define the applications port and destination address here
 	const PORT = "3648"
-	const ADDRESS = "192.168.1.70"
+	const ADDRESS = "192.168.1.70" //CHANGE THIS VALUE ON YOUR MACHINE
 
 	//create template engine
 	engine := html.New("./", ".html")
