@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8" />
+  <title>WebSocket Test</title>
+  
+  <style>
+    /* FILE UPLOADER STYLING FROM https://codepen.io/TheLukasWeb/pen/qlGDa */
+    * {
+      overflow: hidden;
+    }
+    body{
+      background: #850aff;
+    }
+    form{
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-top: -100px;
+      margin-left: -250px;
+      width: 500px;
+      height: 200px;
+      border: 8px solid #fff;
+      border-radius: 5px;
+    }
+    form p{
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      line-height: 170px;
+      color: #fff;
+      font-family: Arial;
+      font-weight: bold;
+      font-size: 20px;
+    }
+    form input{
+      position: absolute;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      outline: none;
+      opacity: 0;
+    }
+  </style>
+
+</head>
+
+<html>
+  <form>
+    <input type="file" name="myFile" id="myFile" onchange="sendFile(this)">
+    <p>Drag or click to upload file</p>
+  </form>
+</html>
+
+<script>
+
+  const wsUri = "ws://{{.adr}}:{{.port}}/socket/file-uploader";
+
+  let socket = new WebSocket(wsUri);
+
+  function sendFile(f) {
+
+    let fr = new FileReader();
+
+    fr.readAsBinaryString(f.files[0]);
+
+    fr.onload = () => {
+      
+      socket.send(JSON.stringify({
+        fileName: f.files[0].name,
+        data: btoa(fr.result)
+      }));
+      
+    }
+
+    fr.onerror = () => {
+      console.error(fr.error)
+    }
+  }
+
+</script>
